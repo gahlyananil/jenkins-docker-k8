@@ -41,4 +41,4 @@
           spec:
              containers:
              - name: app
-               image: ""
+               image: pravjpr/k8scicd:latest

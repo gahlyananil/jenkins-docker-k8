@@ -1,7 +1,7 @@
 - hosts: localhost
   tasks:
   - name: Deploy the service
-    k8s_raw:
+    community.kubernetes.k8s:
       state: present
       definition: 
       apiVersion: v1
@@ -18,7 +18,7 @@
            nodePort: 32000
         type: NodePort
   - name: Deploy the application
-    k8s_raw:
+    community.kubernetes.k8s:
       state: present
       validate_certs: no
       namespace: default

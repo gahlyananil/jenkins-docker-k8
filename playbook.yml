@@ -1,44 +1,14 @@
 - hosts: localhost
   tasks:
   - name: Deploy the service
-    community.kubernetes.k8s:
+    k8s:
       state: present
-      definition: 
-      apiVersion: v1
-      kind: Service
-      metadata:
-        name: hello-svc
-      spec:
-        selector:
-          role: app
-        ports:
-         - protocol: TCP
-           port: 80
-           targetPort: 8080
-           nodePort: 32000
-        type: NodePort
+      definition: "{{ lookup('template', './service.yml') | from_yaml }}"
+      validate_certs: no
+      namespace: default
   - name: Deploy the application
-    community.kubernetes.k8s:
+    k8s:
       state: present
       validate_certs: no
       namespace: default
-      definition: 
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-         name: hello-deployment
-         labels:
-           role: app
-      spec:
-       replicas: 2
-       selector:
-          matchLabels:
-            role: app
-       template:
-          metadata:
-             labels:
-               role: app
-          spec:
-             containers:
-             - name: app
-               image: pravjpr/k8scicd:latest
+      definition: "{{ lookup('template', './deployment.yml') | from_yaml }}"
